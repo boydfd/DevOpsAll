@@ -1,0 +1,108 @@
+---
+- name: add base mirros
+  get_url:
+    url: "http://mirrors.aliyun.com/repo/Centos-8.repo"
+    dest: "/etc/yum.repos.d/CentOS-Base.repo"
+    owner: root
+    group: root
+    mode: 0644
+  when: local == true
+
+
+- name: Add Docker GPG key remote.
+  rpm_key:
+    key: https://download.docker.com/linux/centos/gpg
+    state: present
+  when: local == false
+
+- name: Add Docker GPG key local.
+  rpm_key:
+    key: https://mirrors.aliyun.com/docker-ce/linux/centos/gpg
+    state: present
+  when: local == true
+
+- name: Add Docker repository.
+  get_url:
+    url: "{{ docker_yum_repo_url }}"
+    dest: '/etc/yum.repos.d/docker-{{ docker_edition }}.repo'
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Configure Docker Edge repo.
+  ini_file:
+    dest: '/etc/yum.repos.d/docker-{{ docker_edition }}.repo'
+    section: 'docker-{{ docker_edition }}-edge'
+    option: enabled
+    value: '{{ docker_yum_repo_enable_edge }}'
+
+- name: Configure Docker Test repo.
+  ini_file:
+    dest: '/etc/yum.repos.d/docker-{{ docker_edition }}.repo'
+    section: 'docker-{{ docker_edition }}-test'
+    option: enabled
+    value: '{{ docker_yum_repo_enable_test }}'
+
+- name: Ensure old versions of Docker are not installed.
+  package:
+    name:
+      - docker
+      - docker-common
+      - docker-engine
+    state: absent
+
+- name: Install containerd separately (CentOS 8). remote
+  package:
+    name: https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+    state: present
+  when: ansible_distribution_major_version | int == 8 and local == false
+
+- name: Install containerd separately (CentOS 8). local
+  package:
+    name: https://mirrors.aliyun.com/docker-ce/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+    state: present
+  when: ansible_distribution_major_version | int == 8 and local == true
+
+#- name:
+#  win_hosts:
+#    state: present
+#    canonical_name: raw.githubusercontent.com
+#    ip_address: 151.101.52.133
+#  when: local == true
+
+- name: Add correct ip as an A record for raw github
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^151\.101\.52\.133'
+    line: 151.101.52.133 raw.githubusercontent.com
+    owner: root
+    group: root
+    mode: '0644'
+
+#- name: install dependencies for podman
+#  package:
+#    name: "{{ item }}"
+#    state: present
+#  with_items:
+#    - oci-systemd-hook
+#    - libvarlink
+#  when: local == false
+
+- name: uninstall podman
+  package:
+    name: podman
+    state: absent
+  when: local == false
+
+- name: uninstall podman-manpages
+  package:
+    name: podman-manpages
+    state: absent
+  when: local == false
+
+#- name: install centos stream
+#  package:
+#    name: centos-release-stream
+#    state: present
+#  when: local == false
+

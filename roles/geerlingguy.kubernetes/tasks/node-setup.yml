@@ -1,0 +1,23 @@
+---
+
+- name: make sure firewall closed for k8s services for node
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  with_items:
+    - 10250/tcp
+    - 30000-32767/tcp
+
+- name: make sure firewalld reload for node
+  service:
+    name: firewalld
+    state: restarted
+
+- name: Join node to Kubernetes master
+  shell: >
+    {{ kubernetes_join_command }}
+    creates=/etc/kubernetes/kubelet.conf
+  tags: ['skip_ansible_lint']
+
+

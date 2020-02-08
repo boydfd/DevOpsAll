@@ -1,0 +1,41 @@
+---
+- name: download helm
+  get_url:
+    url: "https://get.helm.sh/helm-v3.1.0-rc.1-linux-amd64.tar.gz"
+    dest: /tmp/helm.gz
+    owner: root
+    group: root
+    mode: 0644
+  retries: 10
+  environment:
+    HTTP_PROXY: http://192.168.0.104:8001
+    http_proxy: http://192.168.0.104:8001
+    HTTPS_PROXY: https://192.168.0.104:8001
+    https_proxy: https://192.168.0.104:8001
+  when: local == true
+
+- name: download helm
+  get_url:
+    url: "https://get.helm.sh/helm-v3.1.0-rc.1-linux-amd64.tar.gz"
+    dest: /tmp/helm.gz
+    owner: root
+    group: root
+    mode: 0644
+  retries: 3
+  when: local == false
+
+- name: Unarchive a helm
+  unarchive:
+    src: /tmp/helm.gz
+    dest: /tmp/
+    remote_src: yes
+
+
+- name: copy helm to bin dir
+  copy:
+    src: /tmp/linux-amd64/helm
+    dest: /usr/bin/helm
+    remote_src: yes
+    owner: root
+    group: root
+    mode: 0755

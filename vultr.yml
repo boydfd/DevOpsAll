@@ -1,0 +1,17 @@
+k8s:
+  vars:
+    ansible_ssh_user: root
+    ansible_ssh_private_key_file: ./private_key
+    local: false
+    kubernetes_apiserver_advertise_address: "66.42.73.173"
+  children:
+    k8s_master:
+      hosts:
+        66.42.73.173:
+
+    k8s_slaves:
+      hosts:
+        144.202.82.113:
+        104.156.252.197:
+      vars:
+        kubernetes_role: node

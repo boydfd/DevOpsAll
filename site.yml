@@ -1,0 +1,20 @@
+---
+- hosts: k8s
+  become: yes
+
+  vars_files:
+    - vars/main.yml
+
+
+  roles:
+    - role: geerlingguy.swap
+      tags: ['swap', 'kubernetes']
+
+    - role: geerlingguy.docker
+      tags: ['docker']
+
+    - role: geerlingguy.kubernetes
+      tags: ['kubernetes']
+
+    - role: helm
+      tags: ['helm']
