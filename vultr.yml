@@ -8,10 +8,13 @@ k8s:
     k8s_master:
       hosts:
         66.42.73.173:
+          hostname: master
 
     k8s_slaves:
       hosts:
         144.202.82.113:
+          hostname: slave1
         104.156.252.197:
+          hostname: slave2
       vars:
         kubernetes_role: node

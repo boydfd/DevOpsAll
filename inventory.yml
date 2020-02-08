@@ -10,10 +10,16 @@ k8s:
     k8s_master:
       hosts:
         192.168.0.107:
+          hostname: master
+          nfs: false
 
     k8s_slaves:
       hosts:
         192.168.0.108:
+          hostname: slave1
+          nfs: false
         192.168.0.109:
+          hostname: slave2
+          nfs: true
       vars:
         kubernetes_role: node

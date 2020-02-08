@@ -1,0 +1,6 @@
+---
+
+- name: include task if nfs is true.
+  include_tasks: nfs.yml
+  when:
+    - nfs == true

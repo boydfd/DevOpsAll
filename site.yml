@@ -7,6 +7,9 @@
 
 
   roles:
+    - role: hostname
+      tags: ['hostname']
+
     - role: geerlingguy.swap
       tags: ['swap', 'kubernetes']
 
@@ -18,3 +21,6 @@
 
     - role: helm
       tags: ['helm']
+
+    - role: ansible-role-nfs
+      tags: ['nfs']
