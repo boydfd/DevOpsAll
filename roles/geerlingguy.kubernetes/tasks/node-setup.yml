@@ -1,18 +1,10 @@
 ---
 
-- name: make sure firewall closed for k8s services for node
-  firewalld:
-    port: "{{ item }}"
-    permanent: yes
-    state: enabled
-  with_items:
-    - 10250/tcp
-    - 30000-32767/tcp
 
-- name: make sure firewalld reload for node
+- name: make sure firewalld stopped
   service:
     name: firewalld
-    state: restarted
+    state: stopped
 
 - name: Join node to Kubernetes master
   shell: >

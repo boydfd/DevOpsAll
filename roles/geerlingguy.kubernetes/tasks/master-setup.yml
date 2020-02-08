@@ -79,20 +79,8 @@
     - kubernetes_enable_web_ui | bool
     - kubernetes_dashboard_service is failed
 
-- name: make sure firewall closed for k8s services for master
-  firewalld:
-    port: "{{ item }}"
-    permanent: yes
-    state: enabled
-  with_items:
-    - 6443/tcp
-    - 2379/tcp
-    - 2380/tcp
-    - 10250/tcp
-    - 10251/tcp
-    - 10252/tcp
 
-- name: make sure firewalld reload
+- name: make sure firewalld stopped
   service:
     name: firewalld
-    state: restarted
+    state: stopped
