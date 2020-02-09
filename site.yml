@@ -1,5 +1,6 @@
 ---
-- hosts: k8s
+- name: install k8s
+  hosts: k8s
   become: yes
 
   vars_files:
@@ -19,8 +20,16 @@
     - role: geerlingguy.kubernetes
       tags: ['kubernetes']
 
-    - role: helm
-      tags: ['helm']
-
+- name: install nfs
+  hosts: nfs
+  become: yes
+  roles:
     - role: ansible-role-nfs
       tags: ['nfs']
+
+- name: install helm
+  hosts: k8s_master
+  become: yes
+  roles:
+    - role: helm
+      tags: ['helm']

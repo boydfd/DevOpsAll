@@ -20,6 +20,10 @@ k8s:
           nfs: false
         192.168.0.109:
           hostname: slave2
-          nfs: true
       vars:
         kubernetes_role: node
+
+nfs:
+  hosts:
+    192.168.0.109:
+
