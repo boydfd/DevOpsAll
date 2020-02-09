@@ -11,15 +11,16 @@ k8s:
       hosts:
         192.168.0.107:
           hostname: master
-          nfs: false
+          helm_location: http://mirror.azure.cn/kubernetes/charts
+          nfs_server: 192.168.0.109
+          nfs_path: /home/public
 
     k8s_slaves:
       hosts:
         192.168.0.108:
           hostname: slave1
-          nfs: false
         192.168.0.109:
-          hostname: slave2
+          hostname: SLAVE2
       vars:
         kubernetes_role: node
 

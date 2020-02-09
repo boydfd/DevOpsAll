@@ -1,0 +1,29 @@
+---
+
+#- name: install pip
+#  package:
+#    name: python3-pip-9.0.3
+#    state: present
+#
+#- name: install pyhelm
+#  pip:
+#    name: pyhelm==2.14.5
+
+
+
+- name: Ensure Pip and dev dependencies are installed.
+  package:
+    name:
+      - python3-pip
+      - python36-devel
+      - libgit2
+      - git
+    state: present
+
+- name: Ensure pyhelm and dependencies are installed.
+  pip:
+    name:
+      #      - pygit2==0.24
+      - pyhelm==2.14.5
+    state: present
+

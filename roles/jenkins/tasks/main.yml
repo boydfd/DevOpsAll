@@ -1,0 +1,24 @@
+---
+
+- name: copy jenkins value yaml
+  copy:
+    src: values.yml
+    dest: /root/jenkins.yml
+    owner: root
+    group: root
+    mode: 0755
+
+- name: get jenkins helm status
+  shell: helm ls | grep jenkins
+  ignore_errors: yes
+  register: helm_jenkins
+
+- name: assign label for slave2
+  command: kubectl label nodes slave2 jenkins=true
+  ignore_errors: yes
+  when: helm_jenkins.rc != 0
+
+- name: install jenkins
+  command: helm install jenkins  stable/jenkins -f /root/jenkins.yml
+  when: helm_jenkins.rc != 0
+

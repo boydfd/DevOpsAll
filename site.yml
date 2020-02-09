@@ -33,3 +33,6 @@
   roles:
     - role: helm
       tags: ['helm']
+
+    - role: jenkins
+      tags: ['jenkins']

@@ -39,3 +39,12 @@
     owner: root
     group: root
     mode: 0755
+  register: helm
+
+- name: add helm repo
+  command: helm repo add stable http://mirror.azure.cn/kubernetes/charts/
+  when: helm is changed
+
+- include_tasks: nfs-provisioner.yml
+  when: helm is changed
+
