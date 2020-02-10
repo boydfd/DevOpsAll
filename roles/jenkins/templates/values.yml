@@ -104,9 +104,11 @@ master:
       cpu: "2000m"
       memory: "4096Mi"
   # Environment variables that get added to the init container (useful for e.g. http_proxy)
-  # initContainerEnv:
-  #   - name: http_proxy
-  #     value: "http://192.168.64.1:3128"
+  initContainerEnv:
+    - name: JENKINS_UC
+      value: "https://mirrors.tuna.tsinghua.edu.cn/jenkins/"
+    - name: JENKINS_UC_DOWNLOAD
+      value: "https://mirrors.tuna.tsinghua.edu.cn/jenkins/"
   # containerEnv:
   #   - name: http_proxy
   #     value: "http://192.168.64.1:3128"
@@ -159,9 +161,9 @@ master:
     - JNLP2-connect
   csrf:
     defaultCrumbIssuer:
-      enabled: true
-      proxyCompatability: true
-  cli: false
+      enabled: false
+      proxyCompatability: false
+  cli: true
   # Kubernetes service type for the JNLP agent service
   # slaveListenerServiceType is the Kubernetes Service type for the JNLP agent service,
   # either 'LoadBalancer', 'NodePort', or 'ClusterIP'
@@ -200,9 +202,9 @@ master:
   #   port: 9000
 
   # List of plugins to be install during Jenkins master start
-  installPlugins:  []
-    #- kubernetes:1.21.2
-    #- blueocean-web:1.22.0
+  installPlugins:
+    - kubernetes:1.21.2
+    - blueocean:1.22.0
     #- workflow-aggregator:2.6
     #- credentials-binding:1.20
   #- git:4.0.0
@@ -217,8 +219,25 @@ master:
   #  - "method groovy.json.JsonSlurperClassic parseText java.lang.String"
   #  - "new groovy.json.JsonSlurperClassic"
   # List of groovy init scripts to be executed during Jenkins master start
-  initScripts: []
-  #  - |
+  initScripts:
+    - |
+      import jenkins.model.*
+      import hudson.security.*
+      import hudson.model.*
+      import jenkins.security.apitoken.*
+      import jenkins.security.*
+
+      def instance = Jenkins.getInstance()
+
+      def hudsonRealm = new HudsonPrivateSecurityRealm(false)
+      hudsonRealm.createAccount("{{ jenkins_user }}","{{ jenkins_password }}")
+      instance.setSecurityRealm(hudsonRealm)
+      instance.save()
+      User u = User.get("MyUSERNAME")
+      ApiTokenProperty t = u.getProperty(ApiTokenProperty.class)
+      def result = t.tokenStore.generateNewToken("token")
+      u.save()
+      println result.plainValue
   #    print 'adding global pipeline libraries, register properties, bootstrap jobs...'
   # Kubernetes secret that contains a 'credentials.xml' for Jenkins
   # credentialsXmlSecret: jenkins-credentials
@@ -294,7 +313,7 @@ master:
     ## Note: To use it you should go to https://smee.io/new and update the url to the generete one.
     # - name: smee
     #   image: docker.io/twalter/smee-client:1.0.2
-    #   args: ["--port", "{{ .Values.master.servicePort }}", "--path", "/github-webhook/", "--url", "https://smee.io/new"]
+    #   args: ["--port", "\{\{ .Values.master.servicePort \}\}", "--path", "/github-webhook/", "--url", "https://smee.io/new"]
     #   resources:
     #     limits:
     #       cpu: 50m

@@ -51,12 +51,12 @@
   when: kubernetes_pod_network.cni == 'flannel'
 
 - name: Configure Calico networking.
-  command: "{{ item }}"
+  shell: "{{ item }}"
   with_items:
-    - kubectl apply -f {{ kubernetes_calico_manifest_file }}
+    - kubectl apply -f {{ kubernetes_weave_manifest_file }}
   register: calico_result
   changed_when: "'created' in calico_result.stdout"
-  when: kubernetes_pod_network.cni == 'calico'
+  when: kubernetes_pod_network.cni == 'weave'
 
 # TODO: Check if taint exists with something like `kubectl describe nodes`
 # instead of using kubernetes_init_stat.stat.exists check.

@@ -30,6 +30,8 @@
 - name: install helm
   hosts: k8s_master
   become: yes
+  vars_files:
+    - vars/jenkins.yml
   roles:
     - role: helm
       tags: ['helm']

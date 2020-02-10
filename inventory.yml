@@ -14,13 +14,15 @@ k8s:
           helm_location: http://mirror.azure.cn/kubernetes/charts
           nfs_server: 192.168.0.109
           nfs_path: /home/public
+          jenkins_server: 192.168.0.109
+          jenkins_port: 32012
 
     k8s_slaves:
       hosts:
         192.168.0.108:
           hostname: slave1
         192.168.0.109:
-          hostname: SLAVE2
+          hostname: slave2
       vars:
         kubernetes_role: node
 

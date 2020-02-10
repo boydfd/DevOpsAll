@@ -6,7 +6,7 @@
     owner: root
     group: root
     mode: 0644
-  retries: 10
+  retries: 20
   environment:
     HTTP_PROXY: http://192.168.0.104:8001
     http_proxy: http://192.168.0.104:8001
@@ -45,6 +45,11 @@
   command: helm repo add stable http://mirror.azure.cn/kubernetes/charts/
   when: helm is changed
 
+- name: get jenkins helm status
+  shell: helm ls | grep nfs
+  ignore_errors: yes
+  register: helm_nfs
+
 - include_tasks: nfs-provisioner.yml
-  when: helm is changed
+  when: helm_nfs.rc != 0
 

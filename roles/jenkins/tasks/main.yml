@@ -1,7 +1,7 @@
 ---
 
 - name: copy jenkins value yaml
-  copy:
+  template:
     src: values.yml
     dest: /root/jenkins.yml
     owner: root
@@ -19,6 +19,16 @@
   when: helm_jenkins.rc != 0
 
 - name: install jenkins
-  command: helm install jenkins  stable/jenkins -f /root/jenkins.yml
+  command: helm install jenkins stable/jenkins -f /root/jenkins.yml
   when: helm_jenkins.rc != 0
 
+- name: Install blue ocean plugin
+  jenkins_plugin:
+    name: "{{ item }}"
+    state: enabled
+    url_username: boydfd
+    url_password: boydfd
+    url: "http://{{ jenkins_server }}:{{ jenkins_port }}"
+  with_items:
+    - blueocean
+    - kubernetes

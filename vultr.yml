@@ -9,6 +9,10 @@ k8s:
       hosts:
         66.42.73.173:
           hostname: master
+          nfs_server: 104.156.252.197
+          nfs_path: /home/public
+          jenkins_server: 104.156.252.197
+          jenkins_port: 32012
 
     k8s_slaves:
       hosts:
@@ -18,3 +22,7 @@ k8s:
           hostname: slave2
       vars:
         kubernetes_role: node
+
+nfs:
+  hosts:
+    104.156.252.197:
