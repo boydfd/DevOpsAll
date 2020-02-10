@@ -12,3 +12,5 @@
 
 - include_tasks: enable.yml
   when: swap_file_state == 'present'
+
+- include_tasks: iptable.yml

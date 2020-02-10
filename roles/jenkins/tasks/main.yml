@@ -22,13 +22,3 @@
   command: helm install jenkins stable/jenkins -f /root/jenkins.yml
   when: helm_jenkins.rc != 0
 
-- name: Install blue ocean plugin
-  jenkins_plugin:
-    name: "{{ item }}"
-    state: enabled
-    url_username: boydfd
-    url_password: boydfd
-    url: "http://{{ jenkins_server }}:{{ jenkins_port }}"
-  with_items:
-    - blueocean
-    - kubernetes

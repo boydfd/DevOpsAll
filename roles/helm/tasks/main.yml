@@ -8,10 +8,10 @@
     mode: 0644
   retries: 20
   environment:
-    HTTP_PROXY: http://192.168.0.104:8001
-    http_proxy: http://192.168.0.104:8001
-    HTTPS_PROXY: https://192.168.0.104:8001
-    https_proxy: https://192.168.0.104:8001
+    HTTP_PROXY: http://192.168.0.103:8001
+    http_proxy: http://192.168.0.103:8001
+    HTTPS_PROXY: https://192.168.0.103:8001
+    https_proxy: https://192.168.0.103:8001
   when: local == true
 
 - name: download helm
