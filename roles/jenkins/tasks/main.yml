@@ -23,3 +23,36 @@
   when: helm_jenkins.rc != 0
   retries: 5
 
+- name: Ensures pip dir exists
+  file: path=~/.pip state=directory
+
+- name: copy pip mirror
+  copy:
+    src: pip.conf
+    dest : ~/.pip/pip.conf
+
+- name: Ensure Pip and dev dependencies are installed.
+  package:
+    name:
+      - python3-pip
+      - python36-devel
+      - libgit2
+      - git
+    state: present
+
+- name: Ensure openshift are installed.
+  pip:
+    name:
+      - openshift
+    state: present
+
+- name: copy gradle cache pvc yaml
+  template:
+    src: gradle_cache_pvc.yml
+    dest: ~/gradle_cache_pvc.yml
+
+- name: require pvc for gradle-cache
+  k8s:
+    state: present
+    src: ~/gradle_cache_pvc.yml
+
