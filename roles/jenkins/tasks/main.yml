@@ -21,4 +21,5 @@
 - name: install jenkins
   command: helm install jenkins stable/jenkins -f /root/jenkins.yml
   when: helm_jenkins.rc != 0
+  retries: 5
 

@@ -70,7 +70,7 @@ master:
 
   # enables configuration done directly via XML files
   # People who want to configure Jenkins via https://github.com/jenkinsci/configuration-as-code-plugin only can set it to false
-  enableXmlConfig: true
+  enableXmlConfig: false
   # Allows to configure different SecurityRealm using Jenkins XML
   securityRealm: |-
     <securityRealm class="hudson.security.LegacySecurityRealm"/>
@@ -109,10 +109,14 @@ master:
       value: "https://mirrors.tuna.tsinghua.edu.cn/jenkins/"
     - name: JENKINS_UC_DOWNLOAD
       value: "https://mirrors.tuna.tsinghua.edu.cn/jenkins/"
-  # containerEnv:
-  #   - name: http_proxy
-  #     value: "http://192.168.64.1:3128"
-  # Set min/max heap here if needed with:
+    - name: CASC_JENKINS_CONFIG
+      value: /var/jenkins_home/casc_configs
+  containerEnv:
+    - name: CASC_JENKINS_CONFIG
+      value: /var/jenkins_home/casc_configs
+#     - name: http_proxy
+#       value: "http://192.168.64.1:3128"
+#   Set min/max heap here if needed with:
   # javaOpts: "-Xms512m -Xmx512m"
   # jenkinsOpts: ""
   # jenkinsUrl: ""
@@ -161,7 +165,7 @@ master:
     - JNLP2-connect
   csrf:
     defaultCrumbIssuer:
-      enabled: false
+      enabled: true
       proxyCompatability: false
   cli: true
   # Kubernetes service type for the JNLP agent service
@@ -205,9 +209,10 @@ master:
   installPlugins:
     - kubernetes:1.21.2
     - blueocean:1.22.0
-    #- workflow-aggregator:2.6
-    #- credentials-binding:1.20
-  #- git:4.0.0
+    - workflow-aggregator:2.6
+    - credentials-binding:1.20
+    - git:4.0.0
+    - job-dsl:latest
 
   # Enable to always override the installed plugins with the values of 'master.installPlugins' on upgrade or redeployment.
   # overwritePlugins: true
@@ -233,7 +238,7 @@ master:
       hudsonRealm.createAccount("{{ jenkins_user }}","{{ jenkins_password }}")
       instance.setSecurityRealm(hudsonRealm)
       instance.save()
-      User u = User.get("MyUSERNAME")
+      User u = User.get("{{ jenkins_user }}")
       ApiTokenProperty t = u.getProperty(ApiTokenProperty.class)
       def result = t.tokenStore.generateNewToken("token")
       u.save()
@@ -258,16 +263,106 @@ master:
   # become the content of the configuration yaml file.  The first line after this is a JCasC root element, eg jenkins, credentials,
   # etc.  Best reference is https://<jenkins_url>/configuration-as-code/reference.  The example below creates a welcome message:
   JCasC:
-    enabled: false
+    enabled: true
     defaultConfig: false
-    pluginVersion: "1.32"
+    pluginVersion: "1.35"
     # it's only used when plugin version is <=1.18 for later version the
     # configuration as code support plugin is no longer needed
     supportPluginVersion: "1.18"
-    configScripts: {}
-    # welcome-message: |
-    #   jenkins:
-    #     systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code'.
+    configScripts:
+     welcome-message: |
+       credentials:
+         system:
+           domainCredentials:
+           - credentials:
+             - usernamePassword:
+                 id: "323"
+                 password: "1123"
+                 scope: GLOBAL
+                 username: "1111"
+       jenkins:
+         systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code'.
+         authorizationStrategy:
+           loggedInUsersCanDoAnything:
+             allowAnonymousRead: false
+         crumbIssuer:
+             standard:
+               excludeClientIPFromCrumb: false
+         updateCenter:
+           sites:
+             - id: "default"
+               url: "https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json"
+         slaveAgentPort: 50000
+         clouds:
+         - kubernetes:
+             connectTimeout: 5
+             containerCapStr: "10"
+             defaultsProviderTemplate: "base"
+             jenkinsTunnel: "jenkins-agent:50000"
+             jenkinsUrl: "http://jenkins:8080"
+             maxRequestsPerHostStr: "32"
+             name: "kubernetes"
+             namespace: "default"
+             podLabels:
+             - key: "jenkins-label"
+               value: "gradle"
+             readTimeout: 15
+             serverUrl: "https://kubernetes.default"
+             skipTlsVerify: true
+             templates:
+             - containers:
+               - args: "cat"
+                 command: "/bin/sh -c"
+                 image: "java:8-jdk-alpine"
+                 livenessProbe:
+                   failureThreshold: 0
+                   initialDelaySeconds: 0
+                   periodSeconds: 0
+                   successThreshold: 0
+                   timeoutSeconds: 0
+                 name: "gradle-base"
+                 ttyEnabled: true
+                 workingDir: "/home/jenkins/agent"
+               hostNetwork: false
+               label: "gradle"
+               name: "gradle-base"
+               namespace: "default"
+               serviceAccount: "jenkins"
+               volumes:
+               - hostPathVolume:
+                   hostPath: "/var/run/docker.sock"
+                   mountPath: "/var/run/docker.sock"
+               - hostPathVolume:
+                   hostPath: "/home/jenkins/.gradle"
+                   mountPath: "/home/jenkins/.gradle"
+               yamlMergeStrategy: "override"
+       unclassified:
+         location:
+             adminAddress: "{{ jenkins_admin_address }}"
+             url: "{{ jenkins_server }}: {{ jenkins_port }}"
+         gitSCM:
+             createAccountBasedOnEmail: false
+             globalConfigEmail: "jenkins@aboydfd.com"
+             globalConfigName: "jenkins"
+             showEntireCommitSummaryInChanges: false
+             useExistingAccountWithSameEmail: false
+
+       jobs:
+         - script: >
+             pipelineJob('jenkins_docker_spring') {
+               definition {
+                 cpsScm {
+                   scm {
+                     git("git://github.com/boydfd/jenkins_docker_spring.git", "smile")
+                   }
+                 }
+               }
+             }
+       tool:
+         git:
+           installations:
+           - name: "jgit"
+
   # Optionally specify additional init-containers
   customInitContainers: []
   # - name: custom-init
@@ -281,7 +376,7 @@ master:
       # jcasc changes will cause a reboot and will only be applied at the subsequent start-up.  Auto-reload uses the Jenkins CLI
       # over SSH to reapply config when changes to the configScripts are detected.  The admin user (or account you specify in
       # master.adminUser) will have a random SSH private key (RSA 4096) assigned unless you specify adminSshKey.  This will be saved to a k8s secret.
-      enabled: false
+      enabled: true
       image: kiwigrid/k8s-sidecar:0.1.20
       imagePullPolicy: IfNotPresent
       resources: {}
@@ -433,7 +528,7 @@ agent:
       cpu: "512m"
       memory: "512Mi"
   # You may want to change this to true while testing a new image
-  alwaysPullImage: false
+  alwaysPullImage: true
   # Controls how agent pods are retained after the Jenkins build completes
   # Possible values: Always, Never, OnFailure
   podRetention: "Never"
