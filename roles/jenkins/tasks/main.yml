@@ -43,16 +43,17 @@
 
 - include_tasks: resource.yml
   vars:
-    name: gradle-wrapper
-    resource: pvc
-
-- include_tasks: resource.yml
-  vars:
     name: jenkins
     resource: namespace
 
+- include_tasks: resource.yml
+  vars:
+    name: gradle-wrapper
+    resource: pvc
+    namespace: jenkins
+
 - name: install jenkins
-  command: helm install jenkins stable/jenkins -f /root/jenkins.yml
+  command: helm install jenkins stable/jenkins -f /root/jenkins.yml --namespace jenkins
   when: helm_jenkins.rc != 0
   retries: 5
 

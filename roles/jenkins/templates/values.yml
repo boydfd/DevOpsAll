@@ -1,6 +1,7 @@
 clusterZone: "cluster.local"
 
 master:
+  namespaceOverride: "jenkins"
   httpsKeyStore:
     jenkinsHttpsJksSecretName: ''
     enable: false
@@ -303,7 +304,7 @@ master:
                jenkinsUrl: "http://jenkins:8080"
                maxRequestsPerHostStr: "32"
                name: "kubernetes"
-               namespace: "default"
+               namespace: "jenkins"
                podRetention: "onFailure"
                podLabels:
                  - key: "jenkins-label"
@@ -317,7 +318,7 @@ master:
                    runAsUser: "0"
                    idleMinutes: 30
                    name: "gradle-base"
-                   namespace: "default"
+                   namespace: "jenkins"
                    serviceAccount: "jenkins"
                    volumes:
                      - persistentVolumeClaim:
@@ -343,7 +344,7 @@ master:
                    runAsUser: "0"
                    idleMinutes: 30
                    name: "docker-base"
-                   namespace: "default"
+                   namespace: "jenkins"
                    serviceAccount: "jenkins"
                    volumes:
                      - hostPathVolume:
