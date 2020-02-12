@@ -18,11 +18,6 @@
   ignore_errors: yes
   when: helm_jenkins.rc != 0
 
-- name: install jenkins
-  command: helm install jenkins stable/jenkins -f /root/jenkins.yml
-  when: helm_jenkins.rc != 0
-  retries: 5
-
 - name: Ensures pip dir exists
   file: path=~/.pip state=directory
 
@@ -51,8 +46,23 @@
     src: gradle_cache_pvc.yml
     dest: ~/gradle_cache_pvc.yml
 
+- name: copy gradle wrapper pvc yaml
+  template:
+    src: gradle_wrapper_pvc.yml
+    dest: ~/gradle_wrapper_pvc.yml
+
 - name: require pvc for gradle-cache
   k8s:
     state: present
     src: ~/gradle_cache_pvc.yml
+
+- name: require pvc for gradle-wrapper
+  k8s:
+    state: present
+    src: ~/gradle_wrapper_pvc.yml
+
+- name: install jenkins
+  command: helm install jenkins stable/jenkins -f /root/jenkins.yml
+  when: helm_jenkins.rc != 0
+  retries: 5
 
