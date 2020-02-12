@@ -295,64 +295,74 @@ master:
                url: "https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json"
          slaveAgentPort: 50000
          clouds:
-         - kubernetes:
-             connectTimeout: 5
-             containerCapStr: "20"
-             defaultsProviderTemplate: "base"
-             jenkinsTunnel: "jenkins-agent:50000"
-             jenkinsUrl: "http://jenkins:8080"
-             maxRequestsPerHostStr: "32"
-             name: "kubernetes"
-             namespace: "default"
-             podRetention: "onFailure"
-             podLabels:
-             - key: "jenkins-label"
-               value: "true"
-             readTimeout: 15
-             serverUrl: "https://kubernetes.default"
-             skipTlsVerify: true
-             templates:
-             - hostNetwork: false
-               label: "gradle"
-               runAsUser: "0"
-               idleMinutes: 30
-               name: "gradle-base"
+           - kubernetes:
+               connectTimeout: 5
+               containerCapStr: "30"
+               defaultsProviderTemplate: "base"
+               jenkinsTunnel: "jenkins-agent:50000"
+               jenkinsUrl: "http://jenkins:8080"
+               maxRequestsPerHostStr: "32"
+               name: "kubernetes"
                namespace: "default"
-               serviceAccount: "jenkins"
-               volumes:
-               - hostPathVolume:
-                   hostPath: "/var/run/docker.sock"
-                   mountPath: "/var/run/docker.sock"
-               - persistentVolumeClaim:
-                   claimName: "gradle-wrapper"
-                   mountPath: "/root/.gradle/wrapper"
-                   readOnly: false
-               yamlMergeStrategy: "override"
-               containers:
-               - args: "cat"
-                 command: "/bin/sh -c"
-                 image: "java:8-jdk-alpine"
-                 livenessProbe:
-                   failureThreshold: 0
-                   initialDelaySeconds: 0
-                   periodSeconds: 0
-                   successThreshold: 0
-                   timeoutSeconds: 0
-                 name: "gradle"
-                 ttyEnabled: true
-                 workingDir: "/home/jenkins/agent"
-               - args: "cat"
-                 command: "/bin/sh -c"
-                 image: "docker:stable"
-                 livenessProbe:
-                   failureThreshold: 0
-                   initialDelaySeconds: 0
-                   periodSeconds: 0
-                   successThreshold: 0
-                   timeoutSeconds: 0
-                 name: "docker"
-                 ttyEnabled: true
-                 workingDir: "/home/docker"
+               podRetention: "onFailure"
+               podLabels:
+                 - key: "jenkins-label"
+                   value: "true"
+               readTimeout: 15
+               serverUrl: "https://kubernetes.default"
+               skipTlsVerify: true
+               templates:
+                 - hostNetwork: false
+                   label: "gradle"
+                   runAsUser: "0"
+                   idleMinutes: 30
+                   name: "gradle-base"
+                   namespace: "default"
+                   serviceAccount: "jenkins"
+                   volumes:
+                     - persistentVolumeClaim:
+                         claimName: "gradle-wrapper"
+                         mountPath: "/root/.gradle/wrapper"
+                         readOnly: false
+                   yamlMergeStrategy: "override"
+                   containers:
+                     - args: "cat"
+                       command: "/bin/sh -c"
+                       image: "java:8-jdk-alpine"
+                       livenessProbe:
+                         failureThreshold: 0
+                         initialDelaySeconds: 0
+                         periodSeconds: 0
+                         successThreshold: 0
+                         timeoutSeconds: 0
+                       name: "gradle"
+                       ttyEnabled: true
+                       workingDir: "/home/jenkins/agent"
+                 - hostNetwork: false
+                   label: "docker"
+                   runAsUser: "0"
+                   idleMinutes: 30
+                   name: "docker-base"
+                   namespace: "default"
+                   serviceAccount: "jenkins"
+                   volumes:
+                     - hostPathVolume:
+                         hostPath: "/var/run/docker.sock"
+                         mountPath: "/var/run/docker.sock"
+                   yamlMergeStrategy: "override"
+                   containers:
+                     - args: "cat"
+                       command: "/bin/sh -c"
+                       image: "docker:stable"
+                       livenessProbe:
+                         failureThreshold: 0
+                         initialDelaySeconds: 0
+                         periodSeconds: 0
+                         successThreshold: 0
+                         timeoutSeconds: 0
+                       name: "docker"
+                       ttyEnabled: true
+                       workingDir: "/home/jenkins/agent"
        unclassified:
          location:
              adminAddress: "{{ jenkins_admin_address }}"
