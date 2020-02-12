@@ -41,25 +41,10 @@
       - openshift
     state: present
 
-- name: copy gradle cache pvc yaml
-  template:
-    src: gradle_cache_pvc.yml
-    dest: ~/gradle_cache_pvc.yml
+- include_tasks: pvc.yml
+  vars:
+    pvc_name: gradle-wrapper
 
-- name: copy gradle wrapper pvc yaml
-  template:
-    src: gradle_wrapper_pvc.yml
-    dest: ~/gradle_wrapper_pvc.yml
-
-- name: require pvc for gradle-cache
-  k8s:
-    state: present
-    src: ~/gradle_cache_pvc.yml
-
-- name: require pvc for gradle-wrapper
-  k8s:
-    state: present
-    src: ~/gradle_wrapper_pvc.yml
 
 - name: install jenkins
   command: helm install jenkins stable/jenkins -f /root/jenkins.yml
