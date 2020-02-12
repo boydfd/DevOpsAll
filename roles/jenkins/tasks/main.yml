@@ -41,10 +41,15 @@
       - openshift
     state: present
 
-- include_tasks: pvc.yml
+- include_tasks: resource.yml
   vars:
-    pvc_name: gradle-wrapper
+    name: gradle-wrapper
+    resource: pvc
 
+- include_tasks: resource.yml
+  vars:
+    name: jenkins
+    resource: namespace
 
 - name: install jenkins
   command: helm install jenkins stable/jenkins -f /root/jenkins.yml

@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: "{{ pvc_name }}"
+  name: "{{ name }}"
   namespace: default
 spec:
   accessModes:
