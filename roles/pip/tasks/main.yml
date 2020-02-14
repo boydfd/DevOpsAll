@@ -1,0 +1,18 @@
+---
+
+- name: Ensures pip dir exists
+  file: path=~/.pip state=directory
+
+- name: copy pip mirror
+  copy:
+    src: pip.conf
+    dest : ~/.pip/pip.conf
+
+- name: Ensure Pip and dev dependencies are installed.
+  package:
+    name:
+      - python3-pip
+      - python36-devel
+      - libgit2
+      - git
+    state: present

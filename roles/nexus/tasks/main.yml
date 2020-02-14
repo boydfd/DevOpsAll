@@ -1,0 +1,31 @@
+---
+
+- name: copy nexus value yaml
+  template:
+    src: values.yml
+    dest: /root/nexus.yml
+    owner: root
+    group: root
+    mode: 0755
+  register: helm_file
+
+- name: get nexus helm status
+  shell: "helm ls -n {{ namespace }}| grep nexus"
+  ignore_errors: yes
+  register: helm_nexus
+  changed_when: false
+
+- name: assign label for slave1
+  command: kubectl label nodes slave1 nexus=true
+  ignore_errors: yes
+  when: helm_nexus.rc != 0
+
+- name: install nexus
+  command: "helm install nexus stable/sonatype-nexus  -n {{ namespace }} -f /root/nexus.yml"
+  when: helm_nexus.rc != 0
+  retries: 5
+
+- name: upgrade nexus
+  command: "helm upgrade nexus stable/sonatype-nexus  -n {{ namespace }} -f /root/nexus.yml"
+  when: helm_nexus.rc == 0 and helm_file.changed == true
+  retries: 5

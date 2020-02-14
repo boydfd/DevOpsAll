@@ -20,6 +20,9 @@
     - role: geerlingguy.kubernetes
       tags: ['kubernetes']
 
+    - role: pip
+      tags: ['pip']
+
 - name: install nfs
   hosts: nfs
   become: yes
@@ -38,3 +41,29 @@
 
     - role: jenkins
       tags: ['jenkins']
+
+- name: pre pull images
+  hosts: k8s_slaves
+  become: yes
+  roles:
+    - role: docker_images
+      tags: ['images']
+
+- name: set up hosts
+  hosts: k8s
+  become: yes
+  vars_files:
+    - vars/nexus.yml
+    - vars/jenkins.yml
+  roles:
+    - role: hosts
+      tags: ['hosts']
+
+- name: install nexus
+  hosts: k8s_master
+  become: yes
+  vars_files:
+    - vars/nexus.yml
+  roles:
+    - role: nexus
+      tags: ['nexus']

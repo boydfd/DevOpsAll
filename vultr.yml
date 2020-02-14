@@ -4,6 +4,7 @@ k8s:
     ansible_ssh_private_key_file: ./private_key
     local: false
     kubernetes_apiserver_advertise_address: "66.42.73.173"
+    remote_const: remote
   children:
     k8s_master:
       hosts:
@@ -11,7 +12,7 @@ k8s:
           hostname: master
           nfs_server: 104.156.252.197
           nfs_path: /home/public
-          jenkins_server: 104.156.252.197
+          jenkins_host: 104.156.252.197
           jenkins_port: 32012
 
     k8s_slaves:

@@ -5,6 +5,14 @@ k8s:
     local: true
     docker_yum_repo_url: "https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
     kubernetes_apiserver_advertise_address: "192.168.0.107"
+    remote_const:
+    jenkins_host: jenkins.aboydfd.com
+    jenkins_port: 80
+    nexus_host: nexus.aboydfd.com
+    nexus_ip: 192.168.0.108
+    docker_host: docker.aboydfd.com
+    docker_ip: 192.168.0.108
+
 
   children:
     k8s_master:
@@ -14,7 +22,6 @@ k8s:
           helm_location: http://mirror.azure.cn/kubernetes/charts
           nfs_server: 192.168.0.109
           nfs_path: /home/public
-          jenkins_server: 192.168.0.109
           jenkins_port: 32012
 
     k8s_slaves:
@@ -29,4 +36,3 @@ k8s:
 nfs:
   hosts:
     192.168.0.109:
-

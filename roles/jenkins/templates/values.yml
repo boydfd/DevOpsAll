@@ -367,7 +367,7 @@ master:
        unclassified:
          location:
              adminAddress: "{{ jenkins_admin_address }}"
-             url: "http://{{ jenkins_server }}:{{ jenkins_port }}"
+             url: "http://{{ jenkins_host }}:{{ jenkins_port }}"
          gitSCM:
              createAccountBasedOnEmail: false
              globalConfigEmail: "jenkins@aboydfd.com"

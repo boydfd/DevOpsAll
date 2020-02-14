@@ -1,0 +1,23 @@
+---
+
+- name: "Build hosts file"
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^{{ item.ip }} {{ item.host }}$'
+    line: "{{ item.ip }} {{ item.host }}"
+    state: present
+  with_items:
+    - ip: "{{ nexus_ip }}"
+      host: "{{ nexus_host }}"
+    - ip: "{{ docker_ip }}"
+      host: "{{ docker_host }}"
+
+- name: add docker insecure host
+  template:
+    src: "docker{{ remote_const }}.conf"
+    dest: /etc/docker/daemon.json
+
+- name: Ensure Docker is started and enabled at boot.
+  service:
+    name: docker
+    state: reloaded

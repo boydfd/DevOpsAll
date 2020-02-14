@@ -1,0 +1,12 @@
+---
+
+- name: Ensure python docker module are installed.
+  pip:
+    name:
+      - docker
+    state: present
+
+- name: pre-pull quay.io/travelaudience/docker-nexus-proxy:2.5.0
+  docker_image:
+    name: "quay.azk8s.cn/travelaudience/docker-nexus-proxy:2.5.0"
+    source: pull

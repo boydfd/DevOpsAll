@@ -18,23 +18,6 @@
   ignore_errors: yes
   when: helm_jenkins.rc != 0
 
-- name: Ensures pip dir exists
-  file: path=~/.pip state=directory
-
-- name: copy pip mirror
-  copy:
-    src: pip.conf
-    dest : ~/.pip/pip.conf
-
-- name: Ensure Pip and dev dependencies are installed.
-  package:
-    name:
-      - python3-pip
-      - python36-devel
-      - libgit2
-      - git
-    state: present
-
 - name: Ensure openshift are installed.
   pip:
     name:
@@ -52,7 +35,7 @@
     resource: pvc
 
 - name: install jenkins
-  command: helm install jenkins stable/jenkins -f /root/jenkins.yml --namespace boydfd
+  command: "helm install jenkins stable/jenkins -f /root/jenkins.yml -n {{ namespace }}"
   when: helm_jenkins.rc != 0
   retries: 5
 

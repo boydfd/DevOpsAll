@@ -1,0 +1,5 @@
+namespace: boydfd
+#nexus_host: nexus.aboydfd.com
+#nexus_ip: 192.168.0.108
+#docker_host: docker.aboydfd.com
+#docker_ip: 192.168.0.108
