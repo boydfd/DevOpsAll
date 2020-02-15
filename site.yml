@@ -39,9 +39,6 @@
     - role: helm
       tags: ['helm']
 
-    - role: jenkins
-      tags: ['jenkins']
-
 - name: pre pull images
   hosts: k8s_slaves
   become: yes
@@ -59,21 +56,12 @@
     - role: hosts
       tags: ['hosts']
 
-- name: install nexus
-  hosts: k8s_master
-  become: yes
-  vars_files:
-    - vars/nexus.yml
-  roles:
-    - role: nexus
-      tags: ['nexus']
-
-
 - name: install infrastructure
   hosts: k8s_master
   become: yes
   vars_files:
     - vars/nexus.yml
+    - vars/jenkins.yml
   roles:
     - role: infrastructure
       tags: ['infrastructure']

@@ -163,16 +163,16 @@ serviceAccount:
   annotations: {}
 
 ingress:
-  enabled: false
+  enabled: true
   path: /
-  annotations: {}
+  annotations:
   # # NOTE: Can't use 'false' due to https://github.com/jetstack/kube-lego/issues/173.
   # kubernetes.io/ingress.allow-http: true
-  # kubernetes.io/ingress.class: gce
+   kubernetes.io/ingress.class: nginx
   # kubernetes.io/ingress.global-static-ip-name: ""
   # kubernetes.io/tls-acme: true
   tls:
-    enabled: true
+    enabled: false
     secretName: nexus-tls
   # Specify custom rules in addition to or instead of the nexus-proxy rules
   rules:

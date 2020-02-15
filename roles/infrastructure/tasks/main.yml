@@ -5,6 +5,17 @@
   vars:
     unit_name: nginx
     unit_repo: stable/nginx-ingress
+
+
+- include_tasks: helm_unit.yml
+  vars:
+    unit_name: jenkins
+    unit_repo: stable/jenkins
     resources:
-        - name: xxxxxxxxxxxxxx
-          type: pvc
+      - name: gradle-wrapper
+        type: pvc
+
+- include_tasks: helm_unit.yml
+  vars:
+    unit_name: nexus
+    unit_repo: stable/sonatype-nexus
