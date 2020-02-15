@@ -1,0 +1,10 @@
+---
+
+
+- include_tasks: helm_unit.yml
+  vars:
+    unit_name: nginx
+    unit_repo: stable/nginx-ingress
+    resources:
+        - name: xxxxxxxxxxxxxx
+          type: pvc

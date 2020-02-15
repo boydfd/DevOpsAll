@@ -1,0 +1,43 @@
+---
+
+- name: copy value yaml
+  template:
+    src: "{{ unit_name }}.yml"
+    dest: "/root/{{ unit_name }}.yml"
+    owner: root
+    group: root
+    mode: 0755
+  register: helm_file
+
+- name: get helm status
+  shell: "helm ls -n {{ namespace }}| grep {{ unit_name }}"
+  ignore_errors: yes
+  register: helm
+  changed_when: false
+
+- name: Ensure openshift are installed.
+  pip:
+    name:
+      - openshift
+    state: present
+
+- include_tasks: resource.yml
+  vars:
+    name: "{{ namespace }}"
+    resource: namespace
+
+- include_tasks: resource.yml
+  vars:
+    name: "{{ item.name }}"
+    resource: "{{ item.type }}"
+  with_items: "{{ resources }}"
+
+- name: install unit
+  command: "helm install {{ unit_name }} {{ unit_repo }}  -n {{ namespace }} -f /root/{{unit_name}}.yml"
+  when: helm.rc != 0
+  retries: 5
+
+- name: upgrade unit
+  command: "helm upgrade {{ unit_name }} {{ unit_repo }}  -n {{ namespace }} -f /root/{{unit_name}}.yml"
+  when: helm.rc == 0 and helm_file.changed == true
+  retries: 5

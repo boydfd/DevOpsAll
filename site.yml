@@ -67,3 +67,13 @@
   roles:
     - role: nexus
       tags: ['nexus']
+
+
+- name: install infrastructure
+  hosts: k8s_master
+  become: yes
+  vars_files:
+    - vars/nexus.yml
+  roles:
+    - role: infrastructure
+      tags: ['infrastructure']
