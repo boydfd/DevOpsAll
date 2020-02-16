@@ -1,12 +1,9 @@
 ---
 
-
-
 - include_tasks: helm_unit.yml
   vars:
     unit_name: nginx
     unit_repo: stable/nginx-ingress
-
 
 - include_tasks: helm_unit.yml
   vars:
@@ -15,8 +12,21 @@
     resources:
       - name: gradle-wrapper
         type: pvc
+      - type: secret
+        data: "{{ jenkins_data }}"
+        name: docker-secret
 
 - include_tasks: helm_unit.yml
   vars:
     unit_name: nexus
     unit_repo: stable/sonatype-nexus
+
+- name: create dns resources
+  include_tasks: resource.yml
+  vars:
+    name: dns
+    resource: configmap
+    hosts:
+      - 192.168.0.108 docker.aboydfd.com
+      - 192.168.0.108 nexus.aboydfd.com
+      - 192.168.0.107 jenkins.aboydfd.com

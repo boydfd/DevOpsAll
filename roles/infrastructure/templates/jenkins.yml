@@ -363,6 +363,15 @@ master:
                        name: "docker"
                        ttyEnabled: true
                        workingDir: "/home/jenkins/agent"
+                       envVars:
+                         - secretEnvVar:
+                             key: "docker_user"
+                             secretKey: "docker_user"
+                             secretName: "docker-secret"
+                         - secretEnvVar:
+                             key: "docker_password"
+                             secretKey: "docker_password"
+                             secretName: "docker-secret"
        unclassified:
          location:
              adminAddress: "{{ jenkins_admin_address }}"
