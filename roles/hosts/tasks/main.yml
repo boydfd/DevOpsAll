@@ -17,7 +17,7 @@
     src: "docker{{ remote_const }}.conf"
     dest: /etc/docker/daemon.json
 
-- name: Ensure Docker is started and enabled at boot.
-  service:
-    name: docker
-    state: reloaded
+
+- name: reload docker
+  command: 'systemctl reload docker'
+  changed_when: false

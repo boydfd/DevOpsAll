@@ -30,6 +30,13 @@
     - role: ansible-role-nfs
       tags: ['nfs']
 
+- name: pre pull images
+  hosts: k8s_slaves
+  become: yes
+  roles:
+    - role: docker_images
+      tags: ['images']
+
 - name: install helm
   hosts: k8s_master
   become: yes
@@ -38,13 +45,6 @@
   roles:
     - role: helm
       tags: ['helm']
-
-- name: pre pull images
-  hosts: k8s_slaves
-  become: yes
-  roles:
-    - role: docker_images
-      tags: ['images']
 
 - name: set up hosts
   hosts: k8s

@@ -13,7 +13,7 @@ k8s:
           nfs_server: 104.156.252.197
           nfs_path: /home/public
           jenkins_host: 104.156.252.197
-          jenkins_port: 32012
+          jenkins_port: 80
 
     k8s_slaves:
       hosts:

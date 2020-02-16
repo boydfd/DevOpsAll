@@ -54,3 +54,11 @@
 
 - include_tasks: node-setup.yml
   when: kubernetes_role == 'node'
+
+- name: add weave to trusted zone
+  firewalld:
+    zone: trusted
+    interface: weave
+    permanent: yes
+    state: enabled
+    immediate: yes

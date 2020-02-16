@@ -131,10 +131,9 @@ master:
   # fsGroup: <will be omitted in deployment if runAsUser is 0>
   servicePort: 8080
   targetPort: 8080
-  nodePort: 32012
   # For minikube, set this to NodePort, elsewhere use LoadBalancer
   # Use ClusterIP if your setup includes ingress controller
-  serviceType: NodePort
+  serviceType: ClusterIP
   # Jenkins master service annotations
   serviceAnnotations: {}
   # Jenkins master custom labels
@@ -450,7 +449,7 @@ master:
   # Node labels and tolerations for pod assignment
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
   # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
-  nodeSelector: {"jenkins": "true"}
+  nodeSelector: {}
   tolerations: []
   # Leverage a priorityClass to ensure your pods survive resource shortages
   # ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/

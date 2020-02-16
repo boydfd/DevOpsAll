@@ -22,7 +22,7 @@ k8s:
           helm_location: http://mirror.azure.cn/kubernetes/charts
           nfs_server: 192.168.0.109
           nfs_path: /home/public
-          jenkins_port: 32012
+          jenkins_port: 80
 
     k8s_slaves:
       hosts:
