@@ -1,2 +1,3 @@
 vagrant
 vars/jenkins.yml
+private_key
