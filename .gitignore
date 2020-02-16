@@ -1,3 +1,3 @@
-vagrant
+files/vagrant_key
 vars/jenkins.yml
 private_key

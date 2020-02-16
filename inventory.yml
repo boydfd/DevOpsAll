@@ -1,7 +1,7 @@
 k8s:
   vars:
     ansible_ssh_user: vagrant
-    ansible_ssh_private_key_file: ./vagrant
+    ansible_ssh_private_key_file: ./vagrant/vagrant_key
     local: true
     docker_yum_repo_url: "https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
     kubernetes_apiserver_advertise_address: "192.168.0.107"
