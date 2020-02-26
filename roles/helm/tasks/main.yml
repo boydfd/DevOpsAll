@@ -45,11 +45,3 @@
   command: helm repo add stable http://mirror.azure.cn/kubernetes/charts/
   when: helm is changed
 
-- name: get jenkins helm status
-  shell: helm ls | grep nfs
-  ignore_errors: yes
-  register: helm_nfs
-
-- include_tasks: nfs-provisioner.yml
-  when: helm_nfs.rc != 0
-

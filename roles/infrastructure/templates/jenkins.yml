@@ -156,8 +156,8 @@ master:
   healthProbeReadinessPeriodSeconds: 10
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 3
-  healthProbeLivenessInitialDelay: 90
-  healthProbeReadinessInitialDelay: 60
+  healthProbeLivenessInitialDelay: 300
+  healthProbeReadinessInitialDelay: 350
   slaveListenerPort: 50000
   slaveHostPort:
   disabledAgentProtocols:
@@ -271,7 +271,7 @@ master:
     # configuration as code support plugin is no longer needed
     supportPluginVersion: "1.18"
     configScripts:
-     welcome-message: |
+     config: |
        credentials:
          system:
            domainCredentials:

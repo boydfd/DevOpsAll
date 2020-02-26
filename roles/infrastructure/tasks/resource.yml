@@ -1,11 +1,11 @@
 ---
 
-- name: copy resources yaml
+- name: copy {{ name }}_{{ resource }} yaml for {{ unit_name }}
   template:
     src: "{{ resource }}.yml"
     dest: "~/{{ name }}_{{ resource }}.yml"
 
-- name: require resource in k8s
+- name: require {{ name }}_{{ resource }} in k8s for {{ unit_name }}
   k8s:
     state: present
     src: "~/{{ name }}_{{ resource }}.yml"

@@ -62,3 +62,18 @@
     permanent: yes
     state: enabled
     immediate: yes
+
+- name: accept all for iptable
+  iptables:
+    chain: "{{ item }}"
+    policy: ACCEPT
+  become: yes
+  with_items:
+    - INPUT
+    - FORWARD
+    - OUTPUT
+
+- name: flush all for iptable
+  iptables:
+    flush: yes
+

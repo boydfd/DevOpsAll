@@ -1,7 +1,0 @@
----
-
-- name: create client nfs-provisioner
-  command: >
-     helm install  nfs stable/nfs-client-provisioner --set nfs.server={{ nfs_server }}
-     --set nfs.path={{ nfs_path }} --set storageClass.defaultClass=true
-

@@ -7,3 +7,20 @@
     name: rpcbind
     state: "{{ nfs_rpcbind_state }}"
     enabled: "{{ nfs_rpcbind_enabled }}"
+
+- name: make sure firewall closed for nfs services for node
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  with_items:
+    - 30000-32767/tcp
+    - 111/udp
+    - 111/tcp
+    - 2049/udp
+    - 2049/tcp
+
+- name: make sure firewalld reload for node
+  service:
+    name: firewalld
+    state: restarted

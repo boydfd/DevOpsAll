@@ -1,0 +1,42 @@
+k8s:
+  vars:
+    ansible_ssh_user: vagrant
+    ansible_ssh_private_key_file: ./files/vagrant_key
+    local: true
+    docker_yum_repo_url: "https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo"
+    remote_const:
+    jenkins_host: jenkins.aboydfd.com
+    jenkins_port: 80
+    nexus_host: nexus.aboydfd.com
+    docker_host: docker.aboydfd.com
+    gitlab_host: gitlab.aboydfd.com
+
+    kubernetes_apiserver_advertise_address: 192.168.0.117
+    jenkins_ip: 192.168.0.119
+    nexus_ip: 192.168.0.118
+    docker_ip: 192.168.0.118
+    gitlab_server: 192.168.0.119
+    nfs_server: 192.168.0.101
+    nfs_path: /home/rlin/4t-first/public
+
+
+  children:
+    k8s_master:
+      hosts:
+        192.168.0.117:
+          hostname: master
+          helm_location: http://mirror.azure.cn/kubernetes/charts
+          jenkins_port: 80
+
+    k8s_slaves:
+      hosts:
+        192.168.0.118:
+          hostname: slave1
+        192.168.0.119:
+          hostname: slave2
+      vars:
+        kubernetes_role: node
+
+nfs:
+  hosts:
+    192.168.0.119:

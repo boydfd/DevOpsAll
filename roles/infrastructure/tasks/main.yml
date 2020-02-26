@@ -2,6 +2,12 @@
 
 - include_tasks: helm_unit.yml
   vars:
+    unit_name: nfs
+    unit_repo: stable/nfs-client-provisioner
+    namespace: default
+
+- include_tasks: helm_unit.yml
+  vars:
     unit_name: nginx
     unit_repo: stable/nginx-ingress
 
@@ -27,6 +33,12 @@
     name: dns
     resource: configmap
     hosts:
-      - 192.168.0.108 docker.aboydfd.com
-      - 192.168.0.108 nexus.aboydfd.com
-      - 192.168.0.107 jenkins.aboydfd.com
+      - '{{ docker_ip }} {{ docker_host }}'
+      - '{{ nexus_ip }} {{ nexus_host }}'
+      - '{{ jenkins_ip }} {{ jenkins_host }}'
+
+- include_tasks: helm_unit.yml
+  vars:
+    unit_name: gitlab
+    unit_repo: gitlab/gitlab
+
