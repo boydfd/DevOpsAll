@@ -1,0 +1,7 @@
+---
+- name: install nfs
+  hosts: nfs
+  become: yes
+  roles:
+    - role: ansible-role-nfs
+      tags: ['nfs']
