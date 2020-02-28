@@ -52,13 +52,13 @@ nexus:
     fsGroup: 2000
   podAnnotations: {}
   livenessProbe:
-    initialDelaySeconds: 600
+    initialDelaySeconds: 150
     periodSeconds: 30
     failureThreshold: 6
     # timeoutSeconds: 10
     path: /
   readinessProbe:
-    initialDelaySeconds: 600
+    initialDelaySeconds: 150
     periodSeconds: 30
     failureThreshold: 6
     # timeoutSeconds: 10
@@ -80,7 +80,7 @@ route:
 
 nexusProxy:
   enabled: true
-  imageName: quay.io/travelaudience/docker-nexus-proxy
+  imageName: quay.azk8s.cn/travelaudience/docker-nexus-proxy
   imageTag: 2.5.0
   imagePullPolicy: IfNotPresent
   port: 8080

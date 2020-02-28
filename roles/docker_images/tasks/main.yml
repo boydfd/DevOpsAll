@@ -6,12 +6,25 @@
       - docker
     state: present
 
-- name: pre-pull quay.io/travelaudience/docker-nexus-proxy:2.5.0
-  docker_image:
-    name: "quay.azk8s.cn/travelaudience/docker-nexus-proxy:2.5.0"
-    source: pull
 
-- name: pre-pull quay.io/external_storage/nfs-client-provisioner:v3.1.0-k8s1.11
+- name: pre-pull gitlab images
   docker_image:
-    name: "quay.azk8s.cn/external_storage/nfs-client-provisioner:v3.1.0-k8s1.11"
+    name: "{{ item }}"
     source: pull
+  with_items:
+    - 192.168.0.101:5000/cfssl-self-sign:1.2
+    - 192.168.0.101:5000/kubectl:1.13.12
+    - 192.168.0.101:5000/redis:5.0.7-debian-9-r50
+    - 192.168.0.101:5000/mc:RELEASE.2018-07-13T00-53-22Z
+    - 192.168.0.101:5000/gitaly:v12.8.1
+    - 192.168.0.101:5000/gitlab-exporter:6.0.0
+    - 192.168.0.101:5000/gitlab-shell:v11.0.0
+    - 192.168.0.101:5000/gitlab-container-registry:v2.8.1-gitlab
+    - 192.168.0.101:5000/gitlab-sidekiq-ee:v12.8.1
+    - 192.168.0.101:5000/gitlab-task-runner-ee:v12.8.1
+    - 192.168.0.101:5000/gitlab-unicorn-ee:v12.8.1
+    - 192.168.0.101:5000/postgres-exporter:0.7.0-debian-9-r12
+    - 192.168.0.101:5000/postgresql:10.9.0
+    - 192.168.0.101:5000/minideb:stretch
+    - 192.168.0.101:5000/alpine-certificates:20171114-r3
+    - 192.168.0.101:5000/gitlab-workhorse-ee:v12.8.1

@@ -6,29 +6,30 @@ replicaCount: 1
 strategyType: Recreate
 
 image:
-  repository: quay.io/external_storage/nfs-client-provisioner
+  repository: quay.azk8s.cn/external_storage/nfs-client-provisioner
   tag: v3.1.0-k8s1.11
   pullPolicy: IfNotPresent
 
 nfs:
   server: {{ nfs_server }}
-  path: {{ nfs_path }}
+  path: {{ nfs_slow_path }}
   mountOptions:
 
 # For creating the StorageClass automatically:
 storageClass:
   create: true
 
+  name: nfs-slow
+
   # Set a provisioner name. If unset, a name will be generated.
-  # provisionerName:
+  provisionerName:  nfs-slow-provisioner
 
   # Set StorageClass as the default StorageClass
   # Ignored if storageClass.create is false
-  defaultClass: true
+  defaultClass: false
 
   # Set a StorageClass name
   # Ignored if storageClass.create is false
-  name: nfs-client
 
   # Allow volume to be expanded dynamically
   allowVolumeExpansion: true

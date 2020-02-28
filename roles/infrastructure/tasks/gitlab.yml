@@ -1,0 +1,33 @@
+---
+
+- name: copy {{ unit_name }} value yaml
+  template:
+    src: "{{ unit_name }}.yml"
+    dest: "/root/{{ unit_name }}.yml"
+    owner: root
+    group: root
+    mode: 0755
+  register: helm_file
+
+- name: copy {{ unit_name }} file
+  copy:
+    src: "{{ unit_name }}.tgz"
+    dest: "/root/{{ unit_name }}.tgz"
+  register: helm_repo_file
+
+- name: get {{ unit_name }} helm status
+  shell: "helm ls -n {{ namespace }}| grep {{ unit_name }}"
+  ignore_errors: yes
+  register: helm
+  changed_when: false
+
+- name: install {{ unit_name }} unit
+  command: "helm install {{ unit_name }} /root/{{ unit_name }}.tgz -n {{ namespace }} -f
+  /root/{{unit_name}}.yml"
+  when: helm.rc != 0
+  retries: 5
+
+- name: upgrade {{ unit_name }} unit
+  command: "helm upgrade {{ unit_name }} /root/{{ unit_name }}.tgz -n {{ namespace }} -f /root/{{unit_name}}.yml"
+  when: helm.rc == 0 and ( helm_file.changed == true or helm_repo_file.changed )
+  retries: 5

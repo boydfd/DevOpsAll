@@ -10,7 +10,7 @@ k8s:
     jenkins_port: 80
     nexus_host: nexus.aboydfd.com
     docker_host: docker.aboydfd.com
-    gitlab_host: gitlab.aboydfd.com
+    gitlab_host: aboydfd.com
 
     kubernetes_apiserver_advertise_address: 192.168.0.107
     jenkins_ip: 192.168.0.109

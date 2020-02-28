@@ -30,6 +30,16 @@
     - role: ansible-role-nfs
       tags: ['nfs']
 
+- name: set up hosts
+  hosts: k8s
+  become: yes
+  vars_files:
+    - vars/nexus.yml
+    - vars/jenkins.yml
+  roles:
+    - role: hosts
+      tags: ['hosts']
+
 - name: pre pull images
   hosts: k8s_slaves
   become: yes
@@ -46,15 +56,6 @@
     - role: helm
       tags: ['helm']
 
-- name: set up hosts
-  hosts: k8s
-  become: yes
-  vars_files:
-    - vars/nexus.yml
-    - vars/jenkins.yml
-  roles:
-    - role: hosts
-      tags: ['hosts']
 
 - name: install infrastructure
   hosts: k8s_master

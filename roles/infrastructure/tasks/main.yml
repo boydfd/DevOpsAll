@@ -1,8 +1,16 @@
 ---
 
+
+
 - include_tasks: helm_unit.yml
   vars:
-    unit_name: nfs
+    unit_name: nfs-slow
+    unit_repo: stable/nfs-client-provisioner
+    namespace: default
+
+- include_tasks: helm_unit.yml
+  vars:
+    unit_name: nfs-fast
     unit_repo: stable/nfs-client-provisioner
     namespace: default
 
@@ -37,8 +45,7 @@
       - '{{ nexus_ip }} {{ nexus_host }}'
       - '{{ jenkins_ip }} {{ jenkins_host }}'
 
-- include_tasks: helm_unit.yml
+- include_tasks: gitlab.yml
   vars:
     unit_name: gitlab
-    unit_repo: gitlab/gitlab
 

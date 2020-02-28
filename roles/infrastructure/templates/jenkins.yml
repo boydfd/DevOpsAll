@@ -156,8 +156,8 @@ master:
   healthProbeReadinessPeriodSeconds: 10
   healthProbeLivenessFailureThreshold: 5
   healthProbeReadinessFailureThreshold: 3
-  healthProbeLivenessInitialDelay: 300
-  healthProbeReadinessInitialDelay: 350
+  healthProbeLivenessInitialDelay: 150
+  healthProbeReadinessInitialDelay: 160
   slaveListenerPort: 50000
   slaveHostPort:
   disabledAgentProtocols:
