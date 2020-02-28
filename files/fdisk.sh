@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 cat << EOF | fdisk /dev/sda
 n
 p
