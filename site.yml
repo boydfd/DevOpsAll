@@ -63,6 +63,7 @@
   vars_files:
     - vars/nexus.yml
     - vars/jenkins.yml
+    - vars/gitlab.yml
   roles:
     - role: infrastructure
       tags: ['infrastructure']

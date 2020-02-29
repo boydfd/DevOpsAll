@@ -32,6 +32,7 @@
     name: "{{ item.name }}"
     resource: "{{ item.type }}"
     data: "{{ item.data | to_yaml }}"
+
   with_items: "{{ resources }}"
   when: resources is defined
 

@@ -11,6 +11,8 @@ global:
   rails:
     bootsnap:
       enabled: false
+  shell:
+    port: {{ gitlab_shell_port }}
 # Don't use certmanager, we'll self-sign
 certmanager:
   install: false

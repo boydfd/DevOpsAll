@@ -1,7 +1,5 @@
 ---
 
-
-
 - include_tasks: helm_unit.yml
   vars:
     unit_name: nfs-slow
@@ -48,4 +46,14 @@
 - include_tasks: gitlab.yml
   vars:
     unit_name: gitlab
+    resources:
+      - name: gitlab-shell
+        type: service
+        data:
+          selected_app: gitlab-shell
+          namespace: boydfd
+          target_port: 2222
+          port: 2222
+          node_port: "{{ gitlab_shell_port }}"
+
 
