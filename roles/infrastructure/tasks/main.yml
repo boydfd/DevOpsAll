@@ -21,6 +21,8 @@
   vars:
     unit_name: jenkins
     unit_repo: stable/jenkins
+    data:
+      jenkins_jobs: "{{ jenkins_jobs }}"
     resources:
       - name: gradle-wrapper
         type: pvc

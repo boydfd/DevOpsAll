@@ -214,6 +214,9 @@ master:
     - git:4.0.0
     - job-dsl:latest
     - copyartifact:1.43
+    - jacoco
+    - build-monitor-plugin
+
 
   # Enable to always override the installed plugins with the values of 'master.installPlugins' on upgrade or redeployment.
   # overwritePlugins: true
@@ -282,10 +285,12 @@ master:
                  scope: GLOBAL
                  username: "1111"
        jenkins:
-         systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code'.
+         systemMessage: Welcome to boydfd's jenkins.
          authorizationStrategy:
            loggedInUsersCanDoAnything:
              allowAnonymousRead: false
+         views:
+           {{ jenkins_view | to_nice_yaml(indent=2) | indent(width=11) }}
          crumbIssuer:
              standard:
                excludeClientIPFromCrumb: false
@@ -382,25 +387,17 @@ master:
              globalConfigName: "jenkins"
              showEntireCommitSummaryInChanges: false
              useExistingAccountWithSameEmail: false
-
-       jobs:
-         - script: >
-             pipelineJob('jenkins_docker_spring') {
-               triggers {
-                 scm("* * * * *")
-               }
-               definition {
-                 cpsScm {
-                   scm {
-                     git("git://github.com/boydfd/jenkins_docker_spring.git", "smile")
-                   }
-                 }
-               }
-             }
        tool:
          git:
            installations:
            - name: "jgit"
+
+       jobs:
+         {% for job in data.jenkins_jobs %}
+- script: >
+             {{ job.script | indent(width=13) }}
+         {% endfor %}
+
 
   # Optionally specify additional init-containers
   customInitContainers: []

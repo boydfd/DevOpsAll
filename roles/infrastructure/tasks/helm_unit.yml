@@ -31,7 +31,8 @@
   vars:
     name: "{{ item.name }}"
     resource: "{{ item.type }}"
-    data: "{{ item.data | to_yaml }}"
+    data_string: "{{ item.data | to_yaml }}"
+    data: "{{ item.data }}"
 
   with_items: "{{ resources }}"
   when: resources is defined
