@@ -14,6 +14,12 @@
 
 - include_tasks: helm_unit.yml
   vars:
+    unit_name: nfs-large-small-files
+    unit_repo: stable/nfs-client-provisioner
+    namespace: default
+
+- include_tasks: helm_unit.yml
+  vars:
     unit_name: nginx
     unit_repo: stable/nginx-ingress
 
@@ -23,6 +29,7 @@
     unit_repo: stable/jenkins
     data:
       jenkins_jobs: "{{ jenkins_jobs }}"
+      credentials: "{{ credentials }}"
     resources:
       - name: gradle-wrapper
         type: pvc
@@ -30,6 +37,10 @@
         type: pvc-fast
       - name: node-modules-cache
         type: pvc-fast
+        data:
+          storage: "6Gi"
+      - name: node-modules-cache-fast
+        type: pvc-large-small-files
         data:
           storage: "6Gi"
       - type: secret

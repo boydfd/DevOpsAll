@@ -19,6 +19,7 @@ k8s:
     nfs_server: 192.168.0.101
     nfs_slow_path: /home/rlin/4t-first/public
     nfs_fast_path: /home/rlin/nfs/public
+    nfs_large_small_files_path: /home/rlin/nfs/public-async
 
 
   children:

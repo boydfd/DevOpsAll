@@ -280,7 +280,7 @@ master:
            domainCredentials:
            - credentials:
              {{ data.credentials | to_nice_yaml(indent=2) | indent(width=13) }}
-         jenkins:
+       jenkins:
          systemMessage: Welcome to boydfd's jenkins.
          authorizationStrategy:
            loggedInUsersCanDoAnything:
@@ -356,7 +356,7 @@ master:
                          mountPath: "/root/.npm"
                          readOnly: false
                      - persistentVolumeClaim:
-                         claimName: "node-modules-cache"
+                         claimName: "node-modules-cache-fast"
                          mountPath: "/home/jenkins/agent/node_modules"
                          readOnly: false
                    yamlMergeStrategy: "override"

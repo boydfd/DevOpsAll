@@ -1,0 +1,12 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: "{{ name }}"
+  namespace: "{{ namespace }}"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ data.storage | default("5Gi") }}
+  storageClassName: nfs-large-small-files
