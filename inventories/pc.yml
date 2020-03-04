@@ -15,7 +15,7 @@ k8s:
     jenkins_ip: 192.168.0.119
     nexus_ip: 192.168.0.118
     docker_ip: 192.168.0.118
-    gitlab_server: 192.168.0.119
+    gitlab_ip: 192.168.0.119
     nfs_server: 192.168.0.101
     nfs_slow_path: /home/rlin/4t-first/public
     nfs_fast_path: /home/rlin/nfs/public

@@ -28,8 +28,8 @@ gitlab-runner:
 # Reduce replica counts, reducing CPU & memory requirements
 gitlab:
   unicorn:
-    minReplicas: 1
-    maxReplicas: 1
+    minReplicas: 2
+    maxReplicas: 2
   sidekiq:
     minReplicas: 1
     maxReplicas: 1

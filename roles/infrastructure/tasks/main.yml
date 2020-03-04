@@ -26,6 +26,12 @@
     resources:
       - name: gradle-wrapper
         type: pvc
+      - name: npm-cache
+        type: pvc-fast
+      - name: node-modules-cache
+        type: pvc-fast
+        data:
+          storage: "6Gi"
       - type: secret
         data: "{{ jenkins_data }}"
         name: docker-secret
@@ -44,6 +50,7 @@
       - '{{ docker_ip }} {{ docker_host }}'
       - '{{ nexus_ip }} {{ nexus_host }}'
       - '{{ jenkins_ip }} {{ jenkins_host }}'
+      - '{{ gitlab_ip }} gitlab.{{ gitlab_host }}'
 
 - include_tasks: gitlab.yml
   vars:

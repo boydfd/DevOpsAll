@@ -1,5 +1,16 @@
 ---
 
+- name: create resources for {{ unit_name }}
+  include_tasks: resource.yml
+  vars:
+    name: "{{ item.name }}"
+    resource: "{{ item.type }}"
+    data_string: "{{ item.data | to_yaml }}"
+    data: "{{ item.data }}"
+
+  with_items: "{{ resources }}"
+  when: resources is defined
+
 - name: copy {{ unit_name }} value yaml
   template:
     src: "{{ unit_name }}.yml"
@@ -26,16 +37,6 @@
     name: "{{ namespace }}"
     resource: namespace
 
-- name: create resources for {{ unit_name }}
-  include_tasks: resource.yml
-  vars:
-    name: "{{ item.name }}"
-    resource: "{{ item.type }}"
-    data_string: "{{ item.data | to_yaml }}"
-    data: "{{ item.data }}"
-
-  with_items: "{{ resources }}"
-  when: resources is defined
 
 - name: install {{ unit_name }} unit
   command: "helm install {{ unit_name }} {{ unit_repo }}  -n {{ namespace }} -f /root/{{unit_name}}.yml"

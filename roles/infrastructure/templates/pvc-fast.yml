@@ -8,5 +8,5 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ storage | default("10Gi") }}
-  storageClassName: nfs-slow
+      storage: {{ storage | default("5Gi") }}
+  storageClassName: nfs-fast

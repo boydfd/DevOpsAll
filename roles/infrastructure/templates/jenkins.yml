@@ -279,12 +279,8 @@ master:
          system:
            domainCredentials:
            - credentials:
-             - usernamePassword:
-                 id: "323"
-                 password: "1123"
-                 scope: GLOBAL
-                 username: "1111"
-       jenkins:
+             {{ data.credentials | to_nice_yaml(indent=2) | indent(width=13) }}
+         jenkins:
          systemMessage: Welcome to boydfd's jenkins.
          authorizationStrategy:
            loggedInUsersCanDoAnything:
@@ -343,6 +339,52 @@ master:
                        name: "gradle"
                        ttyEnabled: true
                        workingDir: "/home/jenkins/agent"
+                 - hostNetwork: false
+                   label: "yarn"
+                   runAsUser: "0"
+                   idleMinutes: 3600
+                   name: "yarn-base"
+                   namespace: "{{ namespace }}"
+                   serviceAccount: "jenkins"
+                   workspaceVolume:
+                     dynamicPVC:
+                       accessModes: "ReadWriteOnce"
+                       requestsSize: "3000m"
+                   volumes:
+                     - persistentVolumeClaim:
+                         claimName: "npm-cache"
+                         mountPath: "/root/.npm"
+                         readOnly: false
+                     - persistentVolumeClaim:
+                         claimName: "node-modules-cache"
+                         mountPath: "/home/jenkins/agent/node_modules"
+                         readOnly: false
+                   yamlMergeStrategy: "override"
+                   containers:
+                     - args: "cat"
+                       command: "/bin/sh -c"
+                       image: "node:13.8.0"
+                       resourceRequestMemory: "2000Mi"
+                       resourceLimitMemory: "3000Mi"
+                       livenessProbe:
+                         failureThreshold: 0
+                         initialDelaySeconds: 0
+                         periodSeconds: 0
+                         successThreshold: 0
+                         timeoutSeconds: 0
+                       name: "yarn"
+                       ttyEnabled: true
+                       workingDir: "/home/jenkins/agent"
+                       envVars:
+                         - envVar:
+                            key: "NODE_MODULES"
+                            value: "/home/jenkins/agent/node_modules"
+                         - envVar:
+                            key: "SASS_BINARY_SITE"
+                            value: "https://npm.taobao.org/mirrors/node-sass/"
+                         - envVar:
+                            key: "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD"
+                            value: "true"
                  - hostNetwork: false
                    label: "docker"
                    runAsUser: "0"
