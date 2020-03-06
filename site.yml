@@ -56,6 +56,12 @@
     - role: helm
       tags: ['helm']
 
+- name: install nfs
+  hosts: nfs
+  become: yes
+  roles:
+    - role: ansible-role-nfs
+      tags: ['nfs']
 
 - name: install infrastructure
   hosts: k8s_master

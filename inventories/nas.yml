@@ -1,8 +1,8 @@
 nfs:
   vars:
-  ansible_ssh_user: rlin
-  ansible_ssh_private_key_file: ./private_key
-  sudo_password: wangwei@520
-  nfs_path: /home/rlin/4t-first/public
+    ansible_ssh_user: rlin
+    ansible_ssh_private_key_file: ./private_key
+    nfs_exports:
+      - "/home/rlin/4t-first/public *(rw,sync,no_root_squash)"
   hosts:
     192.168.0.101:
